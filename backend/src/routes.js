@@ -2,10 +2,15 @@
 const { Router } = require('express');
 
 const DevController = require('./controllers/DevController')
+const SearchController = require('./controllers/SearchController')
 
 const routes = Router();
 
 
+// método para buscar dados
+routes.get('/devs', DevController.index)
+routes.get('/search', SearchController.index)
+// método para registro de usuário
 routes.post('/devs', DevController.store)
 
 // Exportação das rotas
