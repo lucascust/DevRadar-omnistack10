@@ -1,13 +1,12 @@
 // Router é um módulo de Express
 const { Router } = require('express');
 
+const DevController = require('./controllers/DevController')
+
 const routes = Router();
 
 
-routes  .post('/users', (request, response) => {
-    console.log(request.body);
-    return response.json({ message :'Seman' });
-})
+routes.post('/devs', DevController.store)
 
 // Exportação das rotas
 module.exports = routes;

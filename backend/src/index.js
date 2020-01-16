@@ -11,7 +11,7 @@ mongoose.connect('mongodb+srv://lucascust:060789aA@cluster0-gnsrp.mongodb.net/om
 });
 
 app.use(express.json());
-app.use(routes)
+app.use(routes);
 
 
 app.listen(3333);
