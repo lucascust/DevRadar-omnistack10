@@ -1,7 +1,9 @@
+// Este arquivo declara a entidade "Dev" juntamente com seus atributos acompanhados de seus tipos
+
 const mongoose = require('mongoose');
 const PointSchema = require('./utils/PointSchema')
 
-
+// Schema = Entidade
 const DevSchema = new mongoose.Schema({
     name: String,
     github_username: String,
