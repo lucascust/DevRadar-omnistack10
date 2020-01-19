@@ -7,7 +7,7 @@ const SearchController = require('./controllers/SearchController')
 const routes = Router();
 
 
-// método para buscar dados
+// método para buscar dados, Dev busca todos, Search busca com filtro
 routes.get('/devs', DevController.index)
 routes.get('/search', SearchController.index)
 // método para registro de usuário
