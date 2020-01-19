@@ -1,91 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import api from './services/api'
+
 import './global.css'
 import './App.css'
 import './Sidebar.css'
 import './Main.css'
 
+import DevItem from './components/DevItem'
+import DevForm from './components/DevForm'
+
 function App(){
+    const [devs, setDevs] = useState([]);
 
 
+    // Função para alterar os quadros de usuários quando houver cadastro
+    useEffect(() => {
+       async function loadDevs() {
+           const response = await api.get('/devs');
+           setDevs(response.data);
+       } 
+
+       loadDevs();
+    }, []);
+
+    async function handleAddDev(data) {
+
+        const response = await api.post('/devs', data) 
+
+        // Copia toda a lista de Devs, adicionado res.data ao final da mesma
+        setDevs([...devs, response.data]);
+    }
 
     return(
-        <div id = "app">
+        <div id = "app"> 
             {/* Tag para Sidebar (aside)*/}
             <aside>
                 <strong>Cadastrar</strong>
-                <form>
-                    <div class="input-block">
-                        <label htmlFor="github_username">Usuário Github</label>
-                        <input name="github_username" id="github_username" required />
-                    </div>
-                    
-                    <div class="input-block">
-                        <label htmlFor="techs">Tecnologias</label>
-                        <input name="techs" id="techs" required />
-                    </div>
-                    
-                    <div className="input-group">
-                        <div class="input-block">
-                            <label htmlFor="latitude">Latitude</label>
-                            <input name="latitude" id="latitude" required />
-                        </div>
-
-                        <div class="input-block">
-                            <label htmlFor="longitude">Longitude</label>
-                            <input name="longitude" id="longitude" required />
-                        </div>
-                    </div>
-
-                    <button type="submit">Salvar</button>
-                </form>
+                <DevForm onSubmit={handleAddDev} />
+               
             </aside>
 
             <main>
                 <ul>
-                    <li className="dev-item">
-                        <header>
-                            <img src="https://avatars3.githubusercontent.com/u/48959068?s=460&v=4" alt="Lucas Custodio"/>
-                            <div className="user-info">
-                                <strong>Lucas Custodio</strong>
-                                <span>SPICE, REACT, Python</span>
-                            </div>
                         </header>
-                        <p>Texto bio</p>
-                        <a href="https://github.com/lucascust">Acessar Perfil no Github</a>
-                    </li>
-                    <li className="dev-item">
-                        <header>
-                            <img src="https://avatars3.githubusercontent.com/u/48959068?s=460&v=4" alt="Lucas Custodio"/>
-                            <div className="user-info">
-                                <strong>Lucas Custodio</strong>
-                                <span>SPICE, REACT, Python</span>
-                            </div>
-                        </header>
-                        <p>Texto bio</p>
-                        <a href="https://github.com/lucascust">Acessar Perfil no Github</a>
-                    </li>
-                    <li className="dev-item">
-                        <header>
-                            <img src="https://avatars3.githubusercontent.com/u/48959068?s=460&v=4" alt="Lucas Custodio"/>
-                            <div className="user-info">
-                                <strong>Lucas Custodio</strong>
-                                <span>SPICE, REACT, Python</span>
-                            </div>
-                        </header>
-                        <p>Texto bio</p>
-                        <a href="https://github.com/lucascust">Acessar Perfil no Github</a>
-                    </li>
-                    <li className="dev-item">
-                        <header>
-                            <img src="https://avatars3.githubusercontent.com/u/48959068?s=460&v=4" alt="Lucas Custodio"/>
-                            <div className="user-info">
-                                <strong>Lucas Custodio</strong>
-                                <span>SPICE, REACT, Python</span>
-                            </div>
-                        </header>
-                        <p>Texto bio</p>
-                        <a href="https://github.com/lucascust">Acessar Perfil no Github</a>
-                    </li>
+                    {devs.map(dev => (
+                        <DevItem key={dev._id} dev={dev} />
+                    ))}
                 </ul>
             </main>
         </div>
