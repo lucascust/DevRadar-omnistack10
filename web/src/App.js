@@ -42,7 +42,6 @@ function App(){
 
             <main>
                 <ul>
-                        </header>
                     {devs.map(dev => (
                         <DevItem key={dev._id} dev={dev} />
                     ))}
