@@ -4,6 +4,7 @@
 const axios = require('axios');
 const Dev = require('../models/Dev')
 const parseStringAsString = require('../models/utils/parseStringAsArray')
+const { findConnections, sendMessage  } = require('../websocket')
 
 // Funções básicas do controller:
 // Store, Index (mostra lista), Show (mostra um Dev), Update e Destroy
@@ -53,7 +54,15 @@ async store (req, res) {
         location,
 
     })
-    }
+
+    // Filtrar conexões (10km || 1 tech)
+    const sendSocketMessageTo = findConnections(
+        { longitude, latitude },
+        techsArray
+    )
+
+    sendMessage(sendSocketMessageTo, 'new-dev', dev)
+    }   
 
     return res.json(dev);
 }

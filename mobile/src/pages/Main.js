@@ -8,6 +8,9 @@ import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location'
 import { MaterialIcons } from '@expo/vector-icons';
 
 import api from '../services/api'
+import { connect, disconnect, subscribeToNewDevs } from '../services/socket'
+
+
 
 function Main({ navigation }) {
     const [devs, setDevs] = useState([]);
@@ -41,6 +44,24 @@ function Main({ navigation }) {
         loadInitialPosition();
     }, []);
 
+    // Função para previnir problema de setDevs levar muito tempo e o setup executar antes
+    useEffect(() => {
+        subscribeToNewDevs(dev => setDevs([...dev, dev]));
+    }, [devs])
+
+    function setupWebsocket() {
+        // metodo para evitar duplicar conexões
+        disconnect();
+        // envio parametros para filtragem na hora do connect
+        const { latitude, longitude } = currentRegion;
+        connect(
+            latitude,
+            longitude,
+            techs,
+        );
+    };
+
+    // Carrega os Devs no mapa ao realizar pesquisa
     async function loadDevs() {
         const { latitude, longitude } = currentRegion;
         const response = await api.get('/search', {
@@ -50,6 +71,8 @@ function Main({ navigation }) {
         });
 
         setDevs(response.data.devs);
+        // Função de tempo real apenas a partir da primeira busca do usuário
+        setupWebsocket();
     }
 
     function handleRegionChanged(region) {
