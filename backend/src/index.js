@@ -9,11 +9,13 @@ const cors = require('cors')
 const http = require('http');
 
 const app = express();
-const { setupWebSocket } = require('./websocket')
-// extrai servidor do express
-const server = http.server(app);
+const { setupWebsocket } = require('./websocket')
 
-setupWebSocket(server);
+// extrai servidor do express
+const server = http.Server(app);
+
+
+setupWebsocket(server);
 
 // Connecto com o banco Mongo através da string pega pelo Mongo Atlas
 mongoose.connect('mongodb+srv://lucascust:060789aA@cluster0-gnsrp.mongodb.net/omnistack10?retryWrites=true&w=majority',{

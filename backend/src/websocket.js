@@ -7,9 +7,10 @@ const calculateDistance = require('./utils/calculateDistance')
 const connections = [];
 let io
 
-exports.setupWebsocket = (server) => {
-    io = socketio(server);
 
+const setupWebsocket = (server) => {
+
+    io = socketio(server);
 
     // Toda vez que um usuário se conectar, é recebido um objeto chamado "socket"
     io.on('connection', socket => {
@@ -24,7 +25,9 @@ exports.setupWebsocket = (server) => {
             techs: parseStringAsArray(techs)
         });
     });
-}
+};
+exports.setupWebsocket = setupWebsocket;
+
 // exporta o retorno de uma função que verifica se a distancia entre 2 pontos é <10km && se há pelo menos uma tech
 exports.findConnections = (coordinates, techs) => {
     return connections.filter(connections => {
